@@ -1,0 +1,3 @@
+[submodule "fine-tuning"]
+	path = fine-tuning
+	url = git@github.com:tfm-smp-2025/fine-tuning.git
