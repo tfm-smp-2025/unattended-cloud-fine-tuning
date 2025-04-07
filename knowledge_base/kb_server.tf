@@ -23,18 +23,21 @@ resource "hcloud_server" "knowledge_base" {
     }
 }
 
-# Create a volume for the Bestiary (source and DB) and the DBPedia 2016v04 (source)
-resource "hcloud_volume" "dbpedia_disk" {
-    name = "dbpedia2016v4_src"
-    size = 200  # 5.9GB for DBPedia's bzipped sources + extra space for Bestiary (<1GB)
-                # + ~200GB for DBPedia loaded to the Graph DB
+# Create a volume for the source files for the knowledge base
+resource "hcloud_volume" "knowledge_base_source" {
+    name = "knowledge_base_source"
+    size = 110  # 5.9GB for DBPedia 2016v04 bzipped sources
+                # + extra space for Bestiary (~1MB)
+                # + 69 for DBPedia 2016-10 bzipped sources
+                # + 30GB Gzipped Freebase
+                # + 5 extra GB just in case
     delete_protection = true
     server_id = hcloud_server.knowledge_base.id
     automount = true
     format = "ext4"
 
     labels = {
-        "name": "DBPedia_2016v04_and_Bestiary"
+        "name": "Knowledge_base_sources"
     }
 
     lifecycle {
