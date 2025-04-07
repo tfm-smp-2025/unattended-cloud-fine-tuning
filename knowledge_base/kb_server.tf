@@ -44,3 +44,25 @@ resource "hcloud_volume" "knowledge_base_source" {
        prevent_destroy = true
     }
 }
+
+
+# Create a volume for the storage of the loaded knowledge base
+resource "hcloud_volume" "knowledge_base_loaded" {
+    name = "knowledge_base_loaded"
+    size = 200  # basically nothing for Bestiary (~1MB)
+                # + .... DBPedia 2016v04
+                # + .... DBPedia 2016-10
+                # + ~220GB for Freebase
+    delete_protection = true
+    server_id = hcloud_server.knowledge_base.id
+    automount = true
+    format = "ext4"
+
+    labels = {
+        "name": "Knowledge_base_loaded"
+    }
+
+    lifecycle {
+       prevent_destroy = true
+    }
+}

@@ -1,0 +1,2 @@
+---
+apache_jena_fuseki_image: ghcr.io/stain/jena-fuseki:5.0.0

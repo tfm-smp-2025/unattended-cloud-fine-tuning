@@ -1,0 +1,5 @@
+---
+- hosts: knowledge_bases
+  roles:
+    - common
+    - knowledge_base

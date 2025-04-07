@@ -1,0 +1,19 @@
+---
+# Install Apache Jena Fuseki
+- name: Create directory for Apache Jena Fuseki
+  file:
+    path: '{{ loaded_disk }}/fuseki'
+    state: directory
+    owner: 100  # 'fuseki' user inside the Docker image
+    group: 101  # 'fuseki' group inside the Docker image
+    recurse: yes
+
+- name: Create Apache Jena Fuseki server
+  community.docker.docker_container:
+    name: apache_jena_fuseki
+    image: '{{ apache_jena_fuseki_image }}'
+    state: started
+    volumes:
+      - '{{ loaded_disk }}/fuseki:/fuseki'
+    env:
+      ADMIN_PASSWORD: '{{ kb_admin_password }}'

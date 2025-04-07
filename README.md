@@ -35,17 +35,33 @@ If you already downloaded DBPedia 2016v04 locally you can use this data instead 
     tmpfs           960M     0  960M   0% /dev/shm
     tmpfs           5.0M     0  5.0M   0% /run/lock
     /dev/sda15      253M  146K  252M   1% /boot/efi
-    /dev/sdb        196G   28K  186G   1% /mnt/HC_Volume_102384877
-                    ^^^^ this 200GB disk is the one we're interested in
+    /dev/sdb        108G   28K  105G   1% /mnt/HC_Volume_102384877
+                    ^^^^ this 110GB disk is the sources one
+    /dev/sdc        196G   28K  186G   1% /mnt/HC_Volume_102387499
+                    ^^^^ this 200GB disk is the loaded files one
     tmpfs           192M   12K  192M   1% /run/user/0
     ```
 
 3. Close the ssh session `exit`.
 4. Go to the local repository, on the `fine-tuning/datasets` directory and run rsync:    `rsync -HPaz --mkpath by_url/ root@<IP>:/mnt/HC_Volume_<REPLACE THE NUMBER HERE>/datasets/by_url/` (note that the trailing slashes are relevant).
 
-### Setup KB server (Apache Jena)
+### Setup KB server (Apache Jena Fuseki)
 
-@TODO@
+1. On the `knowledge_base/playbooks` directory create a file named `ansible_hosts.yml` with the following content.
+
+    ```yaml
+    knowledge_bases:
+        hosts:
+            <ip>:
+                ansible_user: root  # As configured by Hetzner
+                source_disk: "/mnt/HC_Volume_<REPLACE_THE_SOURCES_DISK_NUMBER_HERE>"
+                loaded_disk: "/mnt/HC_Volume_<REPLACE_THE_LOADED_DISK_NUMBER_HERE>"
+                kb_admin_password: "<ADD_HERE_A_RANDOM_PASSWORD_FOR_THE_KNOWLEDGE_BASE>"
+    ```
+
+2. Install the required ansible modules. `ansible-galaxy collection install -r ansible_galaxy_requirements.yml`. [See here how to obtain `ansible`](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-and-upgrading-ansible).
+
+3. Run ansible `ansible-playbook -i ansible_hosts.yml site.yml`
 
 ### Download the datasets to the server
 
