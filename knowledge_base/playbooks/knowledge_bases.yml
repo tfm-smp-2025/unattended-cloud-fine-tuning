@@ -3,3 +3,4 @@
   roles:
     - common
     - knowledge_base
+    - data_loader

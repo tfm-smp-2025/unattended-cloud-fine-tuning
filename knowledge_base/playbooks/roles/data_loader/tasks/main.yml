@@ -1,0 +1,33 @@
+---
+- name: Make sure the data_loader files are ready
+  delegate_to: localhost
+  stat:
+    path: "{{ data_loader_code_local_path }}/src/__main__.py"
+  register: available_data_loader_src
+- name: Raise error if not found
+  assert:
+    that: available_data_loader_src.stat.exists
+    fail_msg: "Data loader source files not found, run `git submodule update --init --recursive .` on the git directory's root."
+- name: Upload the data handling scripts
+  ansible.posix.synchronize:
+    src: "{{ data_loader_code_local_path }}/"
+    dest: /usr/src/fine-tuning/
+    recursive: yes
+    rsync_opts:
+      - "--no-motd"
+      - "--exclude=datasets"
+      - "--exclude=infra/db"
+      - "--exclude=infra/ollama"
+- name: Link datasets directory
+  file:
+    src: '{{ source_disk }}/datasets'
+    dest: '/usr/src/fine-tuning/datasets'
+    state: link
+- name: Upload the data handling scripts
+  ansible.posix.synchronize:
+    src: "{{ data_loader_code_local_path }}/datasets/"
+    dest: /usr/src/fine-tuning/datasets/
+    recursive: yes
+    rsync_opts:
+      - "--no-motd"
+      - "--exclude=by_url"  # These tend to be too heavy

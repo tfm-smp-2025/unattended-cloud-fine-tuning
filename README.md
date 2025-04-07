@@ -3,6 +3,8 @@ Fine-tune LLM models unattended on cloud platforms.
 
 ## Setup test Knowledge Base
 
+Download extra directories, run `git submodule update --init --recursive .` on this directory root. This will download the `fine-tuning` repo.
+
 ### Create infrastructure
 
 To setup the infrastructure
@@ -65,7 +67,14 @@ If you already downloaded DBPedia 2016v04 locally you can use this data instead 
 
 ### Download the datasets to the server
 
-@TODO@
+1. Connect to the server via ssh: `ssh root@<IP>`
+2. Go to the data_loader code: `cd /usr/src/fine-tuning/`
+3. Create virtualenv: `virtualenv venv`
+4. Open virtualenv: `source venv/bin/activate`
+5. Install dependencies: `pip install -r requirements.txt`
+6. Run the pulling script: `python3 scripts/pull_knowledge_bases.py`
+    - Alternatively, use [screen](https://www.gnu.org/software/screen/) so the server can be disconnected from without stopping the download: `screen python3 scripts/pull_knowledge_bases.py`
+
 
 ### Upload the datasets to the Knowledge Base
 
