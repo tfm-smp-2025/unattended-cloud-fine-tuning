@@ -49,7 +49,7 @@ resource "hcloud_volume" "knowledge_base_source" {
 # Create a volume for the storage of the loaded knowledge base
 resource "hcloud_volume" "knowledge_base_loaded" {
     name = "knowledge_base_loaded"
-    size = 200  # basically nothing for Bestiary (~1MB)
+    size = 300  # basically nothing for Bestiary (~1MB)
                 # + .... DBPedia 2016v04
                 # + .... DBPedia 2016-10
                 # + ~220GB for Freebase

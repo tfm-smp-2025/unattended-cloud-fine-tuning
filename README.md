@@ -39,7 +39,7 @@ If you already downloaded DBPedia 2016v04 locally you can use this data instead 
     /dev/sda15      253M  146K  252M   1% /boot/efi
     /dev/sdb        108G   28K  105G   1% /mnt/HC_Volume_102384877
                     ^^^^ this 110GB disk is the sources one
-    /dev/sdc        196G   28K  186G   1% /mnt/HC_Volume_102387499
+    /dev/sdc        295G   28K  286G   1% /mnt/HC_Volume_102387499
                     ^^^^ this 200GB disk is the loaded files one
     tmpfs           192M   12K  192M   1% /run/user/0
     ```
