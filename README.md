@@ -78,4 +78,8 @@ If you already downloaded DBPedia 2016v04 locally you can use this data instead 
 
 ### Upload the datasets to the Knowledge Base
 
-@TODO@
+1. Connect to the server via ssh: `ssh root@<IP>`
+2. Go to the data_loader code: `cd /usr/src/fine-tuning/`
+3. Open virtualenv: `source venv/bin/activate`
+4. Run data loading script: `ADMIN_SPARQL_PASSWORD=<ADD_HERE_THE_PASSWORD> ./infra/initialize_kb.sh`
+    - This is a VERY SLOW process so you probably would want to run it inside a `screen` session.
