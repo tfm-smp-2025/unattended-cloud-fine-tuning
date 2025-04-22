@@ -13,7 +13,7 @@ provider "hcloud" {
 resource "hcloud_server" "knowledge_base" {
     image = "ubuntu-24.04"
     name = "knowledge-base"
-    server_type = "cpx11"   # We'll create it first with this image, then
+    server_type = "ccx13"   # We'll create it first with this image, then
                             # move to CPX21 without resizing the disk, that 
                             # way we can move back and forth to this tier
     ssh_keys = ["${var.hcloud_ssh_key}"]
@@ -27,7 +27,7 @@ resource "hcloud_server" "knowledge_base" {
 resource "hcloud_volume" "knowledge_base_source" {
     name = "knowledge_base_source"
     size = 110  # 5.9GB for DBPedia 2016v04 bzipped sources
-                # + extra space for Bestiary (~1MB)
+                # + extra space for Beastiary (~1MB)
                 # + 69 for DBPedia 2016-10 bzipped sources
                 # + 30GB Gzipped Freebase
                 # + 5 extra GB just in case
@@ -49,8 +49,8 @@ resource "hcloud_volume" "knowledge_base_source" {
 # Create a volume for the storage of the loaded knowledge base
 resource "hcloud_volume" "knowledge_base_loaded" {
     name = "knowledge_base_loaded"
-    size = 300  # basically nothing for Bestiary (~1MB)
-                # + .... DBPedia 2016v04
+    size = 800  # basically nothing for Beastiary (13MB)
+                # + 380G DBPedia 2016v04
                 # + .... DBPedia 2016-10
                 # + ~220GB for Freebase
     delete_protection = true

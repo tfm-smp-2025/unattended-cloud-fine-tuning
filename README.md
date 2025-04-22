@@ -81,5 +81,7 @@ If you already downloaded DBPedia 2016v04 locally you can use this data instead 
 1. Connect to the server via ssh: `ssh root@<IP>`
 2. Go to the data_loader code: `cd /usr/src/fine-tuning/`
 3. Open virtualenv: `source venv/bin/activate`
-4. Run data loading script: `ADMIN_SPARQL_PASSWORD=<ADD_HERE_THE_PASSWORD> ./infra/initialize_kb.sh`
-    - This is a VERY SLOW process so you probably would want to run it inside a `screen` session.
+4. Create temporary directory for unpacking files before load. `mkdir "<PATH_TO_LOADED_DISK>/tmp"`
+   - This is needed to hold files that expand to >30GB before load.
+5. Run data loading script: `ADMIN_SPARQL_PASSWORD=<ADD_HERE_THE_PASSWORD> TMPDIR="<PATH_TO_LOADED_DISK>/tmp" ./infra/initialize_kb.sh`
+    - This is a VERY SLOW process (**THIS STEP WILL TAKE MULTIPLE DAYS**) so you probably would want to run it inside a `screen` session.
