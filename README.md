@@ -9,7 +9,7 @@ Download extra directories, run `git submodule update --init --recursive .` on t
 
 To setup the infrastructure
 
-1. Open the `knowledge_base` directory
+1. Open the `infra/terraform/knowledge_base` directory
 2. Run `terraform init` on it. Can be obtained from [Terraform.io](https://www.terraform.io/).
 3. Open the Hetzner console and create an API key and upload your SSH public key.
 4. Create and fill the `secret.tfvars` file:
@@ -49,7 +49,7 @@ If you already downloaded DBPedia 2016v04 locally you can use this data instead 
 
 ### Setup KB server (Apache Jena Fuseki)
 
-1. On the `knowledge_base/playbooks` directory create a file named `ansible_hosts.yml` with the following content.
+1. On the `infra/playbooks` directory create a file named `ansible_hosts.yml` with the following content.
 
     ```yaml
     knowledge_bases:
