@@ -1,0 +1,5 @@
+---
+- hosts: vector_dbs
+  roles:
+    - common
+    - vector_db

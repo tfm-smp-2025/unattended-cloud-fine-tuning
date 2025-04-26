@@ -1,0 +1,77 @@
+---
+# Install Weaviate
+- name: Create directory for Weaviate
+  file:
+    path: '{{ vector_disk }}/weaviate'
+    state: directory
+    owner: 0  # 'root' user inside the Docker image
+    group: 0  # 'root' group inside the Docker image
+    recurse: yes
+
+- name: Create a common network
+  community.docker.docker_network:
+    name: weaviate_vector_db_net
+
+- name: Create the Transformers server
+  community.docker.docker_container:
+    name: t2v-transformers
+    image: '{{ transformers_vectorizer_image }}'
+    state: started
+
+    env:
+      ENABLE_CUDA: '{{ transformers_vectorizer_enable_cuda }}'
+
+    networks:
+      - name: weaviate_vector_db_net
+
+    healthcheck:
+      test: "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+      start_interval: 10s
+
+- name: Create the Weaviate server
+  community.docker.docker_container:
+    name: weaviate
+    image: '{{ weaviate_image }}'
+    state: started
+
+    env:
+      ENABLE_CUDA: '{{ transformers_vectorizer_enable_cuda }}'
+    volumes:
+      - '{{ vector_disk }}/weaviate:/var/lib/weaviate'
+    env:
+      ADMIN_PASSWORD: '{{ kb_admin_password }}'
+      QUERY_DEFAULTS_LIMIT: '25'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      ENABLE_API_BASED_MODULES: 'true'
+      CLUSTER_HOSTNAME: 'node1'
+      ENABLE_MODULES: text2vec-transformers # Enable this module
+      TRANSFORMERS_INFERENCE_API: http://t2v-transformers:8080  # Set the inference API endpoint
+
+      # Disable anonymous access.
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'false'
+      # Enables API key authentication.
+      AUTHENTICATION_APIKEY_ENABLED: 'true'
+      # List one or more keys in plaintext separated by commas. Each key corresponds to a specific user identity below.
+      AUTHENTICATION_APIKEY_ALLOWED_KEYS: 'admin'
+      # List one or more user identities, separated by commas. Each identity corresponds to a specific key above.
+      AUTHENTICATION_APIKEY_USERS: '{{ vector_db_apikey }}'
+      # This is an experimental feature. Use with caution.
+      ASYNC_INDEXING: 'true'
+    ports:
+      - "8080:8080/tcp"
+      - "50051:50051"
+
+    networks:
+      - name: weaviate_vector_db_net
+
+    healthcheck:
+      test: "wget -qO - --tries=1 http://127.0.0.1:8080/v1/.well-known/live || exit 1"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+      start_interval: 10s
