@@ -13,7 +13,7 @@ provider "hcloud" {
 resource "hcloud_server" "knowledge_base" {
     image = "ubuntu-24.04"
     name = "knowledge-base"
-    server_type = "ccx13"   # We'll create it first with this image, then
+    server_type = "ccx33"   # We'll create it first with this image, then
                             # move to CPX21 without resizing the disk, that 
                             # way we can move back and forth to this tier
     ssh_keys = ["${var.hcloud_ssh_key}"]
