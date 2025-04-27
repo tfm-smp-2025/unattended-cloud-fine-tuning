@@ -56,9 +56,9 @@
       # Enables API key authentication.
       AUTHENTICATION_APIKEY_ENABLED: 'true'
       # List one or more keys in plaintext separated by commas. Each key corresponds to a specific user identity below.
-      AUTHENTICATION_APIKEY_ALLOWED_KEYS: 'admin'
+      AUTHENTICATION_APIKEY_ALLOWED_KEYS: '{{ vector_db_apikey }}'
       # List one or more user identities, separated by commas. Each identity corresponds to a specific key above.
-      AUTHENTICATION_APIKEY_USERS: '{{ vector_db_apikey }}'
+      AUTHENTICATION_APIKEY_USERS: 'admin'
       # This is an experimental feature. Use with caution.
       ASYNC_INDEXING: 'true'
     ports:
