@@ -24,6 +24,7 @@
     networks:
       - name: weaviate_vector_db_net
 
+    restart_policy: "unless-stopped"
     healthcheck:
       test: "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1"
       interval: 30s
@@ -68,6 +69,7 @@
     networks:
       - name: weaviate_vector_db_net
 
+    restart_policy: "unless-stopped"
     healthcheck:
       test: "wget -qO - --tries=1 http://127.0.0.1:8080/v1/.well-known/live || exit 1"
       interval: 30s
