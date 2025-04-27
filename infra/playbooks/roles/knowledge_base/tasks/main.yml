@@ -1,2 +1,3 @@
 ---
 - import_tasks: jena_fuseki_server.yml
+- import_tasks: nginx_password_reverse_proxy.yml
