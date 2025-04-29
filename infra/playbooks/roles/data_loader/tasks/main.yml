@@ -16,8 +16,11 @@
     rsync_opts:
       - "--no-motd"
       - "--exclude=datasets"
+      - "--exclude=cache"
+      - "--exclude=experiment-viewer/logs/"
       - "--exclude=infra/db"
       - "--exclude=infra/ollama"
+      - "--exclude=infra/vector-db/weaviate_data"
 - name: Link datasets directory
   file:
     src: '{{ source_disk }}/datasets'

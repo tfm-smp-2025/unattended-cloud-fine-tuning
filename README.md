@@ -9,7 +9,7 @@ Download extra directories, run `git submodule update --init --recursive .` on t
 
 To setup the infrastructure
 
-1. Open the `knowledge_base` directory
+1. Open the `infra/terraform/knowledge_base` directory
 2. Run `terraform init` on it. Can be obtained from [Terraform.io](https://www.terraform.io/).
 3. Open the Hetzner console and create an API key and upload your SSH public key.
 4. Create and fill the `secret.tfvars` file:
@@ -39,8 +39,10 @@ If you already downloaded DBPedia 2016v04 locally you can use this data instead 
     /dev/sda15      253M  146K  252M   1% /boot/efi
     /dev/sdb        108G   28K  105G   1% /mnt/HC_Volume_102384877
                     ^^^^ this 110GB disk is the sources one
-    /dev/sdc        295G   28K  286G   1% /mnt/HC_Volume_102387499
-                    ^^^^ this 200GB disk is the loaded files one
+    /dev/sdc        787G   28K  787G   1% /mnt/HC_Volume_102387499
+                    ^^^^ this 800GB disk is the loaded files one
+    /dev/sdd         20G   24K   19G   1% /mnt/HC_Volume_102477904
+                    ^^^^ this  20GB disk is the Vector DBs one
     tmpfs           192M   12K  192M   1% /run/user/0
     ```
 
@@ -49,7 +51,7 @@ If you already downloaded DBPedia 2016v04 locally you can use this data instead 
 
 ### Setup KB server (Apache Jena Fuseki)
 
-1. On the `knowledge_base/playbooks` directory create a file named `ansible_hosts.yml` with the following content.
+1. On the `infra/playbooks` directory create a file named `ansible_hosts.yml` with the following content.
 
     ```yaml
     knowledge_bases:
@@ -63,7 +65,7 @@ If you already downloaded DBPedia 2016v04 locally you can use this data instead 
 
 2. Install the required ansible modules. `ansible-galaxy collection install -r ansible_galaxy_requirements.yml`. [See here how to obtain `ansible`](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-and-upgrading-ansible).
 
-3. Run ansible `ansible-playbook -i ansible_hosts.yml site.yml`
+3. Run ansible `ansible-playbook -i ansible_hosts.yml -l knowledge_bases site.yml`
 
 ### Download the datasets to the server
 
@@ -85,3 +87,20 @@ If you already downloaded DBPedia 2016v04 locally you can use this data instead 
    - This is needed to hold files that expand to >30GB before load.
 5. Run data loading script: `ADMIN_SPARQL_PASSWORD=<ADD_HERE_THE_PASSWORD> TMPDIR="<PATH_TO_LOADED_DISK>/tmp" ./infra/initialize_kb.sh`
     - This is a VERY SLOW process (**THIS STEP WILL TAKE MULTIPLE DAYS**) so you probably would want to run it inside a `screen` session.
+
+### Weaviate vector DB
+
+1. On the `infra/playbooks` directory create a file named `ansible_hosts.yml` with the following content.
+
+    ```yaml
+    vector_dbs:
+        hosts:
+            <ip>:
+                ansible_user: root  # As configured by Hetzner
+                vector_disk: "/mnt/HC_Volume_<REPLACE_THE_VECTOR_DISK_NUMBER_HERE>"
+                vector_db_apikey: "<ADD_HERE_A_RANDOM_API_KEY_FOR_THE_VECTOR_DB>"
+    ```
+
+2. Install the required ansible modules. `ansible-galaxy collection install -r ansible_galaxy_requirements.yml`. [See here how to obtain `ansible`](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-and-upgrading-ansible).
+
+3. Run ansible `ansible-playbook -i ansible_hosts.yml -l vector_dbs site.yml`

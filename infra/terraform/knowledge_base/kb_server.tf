@@ -13,7 +13,7 @@ provider "hcloud" {
 resource "hcloud_server" "knowledge_base" {
     image = "ubuntu-24.04"
     name = "knowledge-base"
-    server_type = "ccx13"   # We'll create it first with this image, then
+    server_type = "ccx33"   # We'll create it first with this image, then
                             # move to CPX21 without resizing the disk, that 
                             # way we can move back and forth to this tier
     ssh_keys = ["${var.hcloud_ssh_key}"]
@@ -60,6 +60,24 @@ resource "hcloud_volume" "knowledge_base_loaded" {
 
     labels = {
         "name": "Knowledge_base_loaded"
+    }
+
+    lifecycle {
+       prevent_destroy = true
+    }
+}
+
+# Create a volume for the storage of the vector database
+resource "hcloud_volume" "vector_db" {
+    name = "vector_db"
+    size = 20
+    delete_protection = true
+    server_id = hcloud_server.knowledge_base.id
+    automount = true
+    format = "ext4"
+
+    labels = {
+        "name": "vector_db"
     }
 
     lifecycle {

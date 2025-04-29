@@ -1,0 +1,3 @@
+---
+- import_playbook: knowledge_bases.yml
+- import_playbook: vector_dbs.yml
