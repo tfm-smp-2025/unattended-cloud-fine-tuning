@@ -84,3 +84,20 @@ resource "hcloud_volume" "vector_db" {
        prevent_destroy = true
     }
 }
+# Create a volume for the storage of the Google Colab results
+resource "hcloud_volume" "result_pusher" {
+    name = "result_pusher"
+    size = 30
+    delete_protection = true
+    server_id = hcloud_server.knowledge_base.id
+    automount = true
+    format = "ext4"
+
+    labels = {
+        "name": "result_pusher"
+    }
+
+    lifecycle {
+       prevent_destroy = true
+    }
+}
