@@ -104,3 +104,20 @@ If you already downloaded DBPedia 2016v04 locally you can use this data instead 
 2. Install the required ansible modules. `ansible-galaxy collection install -r ansible_galaxy_requirements.yml`. [See here how to obtain `ansible`](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-and-upgrading-ansible).
 
 3. Run ansible `ansible-playbook -i ansible_hosts.yml -l vector_dbs site.yml`
+
+## Execution examples
+
+The [notebook directory](https://github.com/tfm-smp-2025/unattended-cloud-fine-tuning/tree/main/notebooks) holds examples on how to use the infrastructure spawned with this repo and [the code on the src repo](https://github.com/tfm-smp-2025/fine-tuning/) to evaluate the suitability of models for the SPARQL query generation task:
+
+- Base models:
+  + DeepSeek-r1: https://github.com/tfm-smp-2025/unattended-cloud-fine-tuning/blob/main/notebooks/evaluate-model-deepseek-r1-7b.ipynb
+  + Gemma3: https://github.com/tfm-smp-2025/unattended-cloud-fine-tuning/blob/main/notebooks/evaluate-model-gemma3-12b.ipynb
+  + Mixtral 8x7: https://github.com/tfm-smp-2025/unattended-cloud-fine-tuning/blob/main/notebooks/evaluate-model-mixtral-8x7.ipynb
+  + OpenMistral 7b: https://github.com/tfm-smp-2025/unattended-cloud-fine-tuning/blob/main/notebooks/evaluate-model-open-mistral-7.ipynb
+  + Phi-4: https://github.com/tfm-smp-2025/unattended-cloud-fine-tuning/blob/main/notebooks/evaluate-model-phi4-14b.ipynb
+
+- Fine tuned models [[1]](https://github.com/tfm-smp-2025/unattended-cloud-fine-tuning/blob/main/notebooks/evaluate-fine-tuned-model-phi4-quantized.ipynb) and [[2]](https://github.com/tfm-smp-2025/unattended-cloud-fine-tuning/blob/main/notebooks/evaluate-fine-tuned-model-phi4.ipynb).
+
+Also, how to fine tune a Phi-4 model according to multiple parameters: https://github.com/tfm-smp-2025/unattended-cloud-fine-tuning/blob/main/notebooks/parametrized-fine-tune-phi4.ipynb . Note that it does not render on GitHub's view as it uses Google Colab-specific comments to show widgets to adjust the different parameters.
+
+Finally, how to quantize and produce an Ollama-loadable version of a fine-tune produced by the previous notebook: https://github.com/tfm-smp-2025/unattended-cloud-fine-tuning/blob/main/notebooks/quantize-and-convert-fine-tuned-phi4.ipynb . Note that it does not render on GitHub's viewer for the same reason as the last one.
